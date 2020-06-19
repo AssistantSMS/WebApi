@@ -57,9 +57,8 @@ namespace ScrapMechanic.Data.Helper
         {
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc(ApiAccess.PublicBasic, SwaggerHelper.CreateInfoForApiVersion(ApiAccess.PublicBasic));
                 c.SwaggerDoc(ApiAccess.Public, SwaggerHelper.CreateInfoForApiVersion(ApiAccess.Public));
-                c.SwaggerDoc(ApiAccess.Auth, SwaggerHelper.CreateInfoForApiVersion(ApiAccess.Auth));
+                //c.SwaggerDoc(ApiAccess.Auth, SwaggerHelper.CreateInfoForApiVersion(ApiAccess.Auth));
                 c.SwaggerDoc(ApiAccess.All, SwaggerHelper.CreateInfoForApiVersion(ApiAccess.All));
                 c.DocInclusionPredicate(SwaggerHelper.DocInclusionPredicate);
 

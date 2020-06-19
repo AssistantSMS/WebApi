@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using ScrapMechanic.Api.Filter;
 using ScrapMechanic.Domain.Contract;
 using ScrapMechanic.Domain.Dto;
+using ScrapMechanic.Domain.Dto.Enum;
 using ScrapMechanic.Domain.Mapper;
 using ScrapMechanic.Integration.Repository.Interface;
 
@@ -25,7 +27,7 @@ namespace ScrapMechanic.Api.Controllers
         /// </summary>
         [HttpGet]
         [Route("[action]")]
-        //[CacheFilter(CacheType.HelloGamesRelease)]
+        [CacheFilter(CacheType.SteamNews, numMinutes:30)]
         public async Task<ActionResult<List<SteamNewsItemViewModel>>> News()
         {
             List<SteamNewsItem> scrapMechanicNewsItems = await _newsRepo.GetNewsItems("387990");
