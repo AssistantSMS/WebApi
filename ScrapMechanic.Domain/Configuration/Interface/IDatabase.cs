@@ -1,0 +1,9 @@
+﻿namespace ScrapMechanic.Domain.Configuration.Interface
+{
+    public interface IDatabase
+    {
+        string ConnectionString { get; set; }
+        int CommandTimeout { get; set; }
+        int PageSize { get; set; }
+    }
+}

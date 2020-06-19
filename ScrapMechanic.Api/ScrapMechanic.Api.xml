@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ScrapMechanic.Api</name>
+    </assembly>
+    <members>
+        <member name="M:ScrapMechanic.Api.Controllers.MiscController.Head">
+            <summary>
+            Handle HEAD requests to root of API.
+            </summary>
+        </member>
+        <member name="M:ScrapMechanic.Api.Controllers.MiscController.HandleFaviconRequest">
+            <summary>
+            Handle requests for favicon
+            </summary>
+        </member>
+        <member name="M:ScrapMechanic.Api.Controllers.MiscController.HandleRobots">
+            <summary>
+            Handle requests for robots.txt
+            </summary>
+        </member>
+        <member name="M:ScrapMechanic.Api.Controllers.MiscController.CatchAll(System.String)">
+            <summary>
+            Handle not found requests. Version requests redirected to /version. Everything else redirected to Swagger Docs
+            </summary>
+        </member>
+        <member name="M:ScrapMechanic.Api.Controllers.NewsController.News">
+            <summary>
+            Get News from https://store.steampowered.com/news/?appids=387990.
+            </summary>
+        </member>
+    </members>
+</doc>
