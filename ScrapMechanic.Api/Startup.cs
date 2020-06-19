@@ -56,7 +56,7 @@ namespace ScrapMechanic.Api
                     .WithHeaders(ApiCorsSettings.ExposedHeaders)
                     .WithExposedHeaders(ApiCorsSettings.ExposedHeaders)
                     .SetPreflightMaxAge(TimeSpan.FromSeconds(30))
-                    .AllowCredentials()
+                    //.AllowCredentials()
             );
             //db.Database.Migrate();
 
