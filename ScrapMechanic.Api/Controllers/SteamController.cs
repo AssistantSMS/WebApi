@@ -31,6 +31,7 @@ namespace ScrapMechanic.Api.Controllers
         public async Task<ActionResult<List<SteamNewsItemViewModel>>> News()
         {
             List<SteamNewsItem> scrapMechanicNewsItems = await _newsRepo.GetNewsItems("387990");
+            if (scrapMechanicNewsItems.Count == 0) return StatusCode(502);
             return Ok(scrapMechanicNewsItems.ToViewModel());
         }
     }
