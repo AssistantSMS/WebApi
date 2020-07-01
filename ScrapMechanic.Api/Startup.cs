@@ -64,9 +64,7 @@ namespace ScrapMechanic.Api
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint($"/swagger/{ApiAccess.Public}/swagger.json", "AssistantSMS API - Public");
-                //c.SwaggerEndpoint($"/swagger/{ApiAccess.Auth}/swagger.json", "AssistantSMS API - Authenticated");
                 c.SwaggerEndpoint($"/swagger/{ApiAccess.All}/swagger.json", "AssistantSMS API - All");
-                //c.InjectStylesheet("/assets/css/customSwagger.css");
                 c.DocumentTitle = "AssistantSMS API Documentation";
                 c.RoutePrefix = string.Empty;
                 c.DisplayRequestDuration();

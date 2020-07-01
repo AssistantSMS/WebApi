@@ -13,12 +13,21 @@ namespace ScrapMechanic.Data.Helper
     {
         public static IServiceCollection RegisterThirdPartyServicesForApi(this IServiceCollection services, IApiConfiguration config)
         {
+            services.SetUpApplicationInsight(config);
             //services.SetUpEntityFramework(config);
             //services.SetUpJwt(config);
             services.SetUpSwagger();
             return services;
         }
-        
+
+        private static void SetUpApplicationInsight(this IServiceCollection services, IApiConfiguration config)
+        {
+            if (config.ApplicationInsights.Enabled)
+            {
+                services.AddApplicationInsightsTelemetry(config.ApplicationInsights.InstrumentationKey);
+            }
+        }
+
         //private static void SetUpEntityFramework(this IServiceCollection services, IApiConfiguration config)
         //{
         //    services.AddDbContext<NmsAssistantContext>(options => options
@@ -26,7 +35,7 @@ namespace ScrapMechanic.Data.Helper
         //        .UseSqlServer(config.Database.ConnectionString, dbOptions => dbOptions.MigrationsAssembly("NMS.Assistant.Api"))
         //    );
         //}
-        
+
         //private static void SetUpJwt(this IServiceCollection services, IApiConfiguration config)
         //{
 
