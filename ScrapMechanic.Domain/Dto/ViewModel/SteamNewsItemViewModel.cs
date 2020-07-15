@@ -9,6 +9,7 @@ namespace ScrapMechanic.Domain.Dto.ViewModel
         public string Link { get; set; }
         public string Image { get; set; }
         public string ShortDescription { get; set; }
+        public string VideoLink { get; set; }
         public int UpVotes { get; set; }
         public int DownVotes { get; set; }
     }

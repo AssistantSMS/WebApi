@@ -16,6 +16,7 @@ namespace ScrapMechanic.Domain.Mapper
                 Image = domain.Image,
                 Date = domain.Date,
                 ShortDescription = domain.ShortDescription,
+                VideoLink = domain.VideoLink,
                 UpVotes = domain.UpVotes,
                 DownVotes = domain.DownVotes,
             };
