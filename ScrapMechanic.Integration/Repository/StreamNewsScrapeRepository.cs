@@ -53,12 +53,22 @@ namespace ScrapMechanic.Integration.Repository
                     foreach (Event webObjectEvent in webObject.Events)
                     {
                         string coverImage = defaultCoverImage;
-                        Regex regex = new Regex(@"\[img\]\{STEAM_CLAN_IMAGE}.+\[\/img\]");
-                        if (regex.IsMatch(webObjectEvent.AnnouncementBody.Markdown))
+                        Regex steamImageRegex = new Regex(@"\[img\]\{STEAM_CLAN_IMAGE\}.+?\[\/img\]");
+                        if (steamImageRegex.IsMatch(webObjectEvent.AnnouncementBody.Markdown))
                         {
-                            coverImage = regex.Match(webObjectEvent.AnnouncementBody.Markdown).Value
+                            coverImage = steamImageRegex.Match(webObjectEvent.AnnouncementBody.Markdown).Value
                                 .Replace("[img]{STEAM_CLAN_IMAGE}", string.Empty)
                                 .Replace("[/img]", string.Empty);
+                        }
+                        else
+                        {
+                            Regex externalImageRegex = new Regex(@"\[img\].+?\[\/img\]");
+                            if (externalImageRegex.IsMatch(webObjectEvent.AnnouncementBody.Markdown))
+                            {
+                                coverImage = externalImageRegex.Match(webObjectEvent.AnnouncementBody.Markdown).Value
+                                    .Replace("[img]{STEAM_CLAN_IMAGE}", string.Empty)
+                                    .Replace("[/img]", string.Empty);
+                            }
                         }
 
                         string descriptionInput = webObjectEvent.AnnouncementBody.Markdown.Replace("[img]{STEAM_CLAN_IMAGE}"+coverImage+"[/img]", string.Empty);
@@ -70,6 +80,8 @@ namespace ScrapMechanic.Integration.Repository
                             taglessDescription = taglessDescription.Substring(0, shortDescripMaxLength);
                         taglessDescription = taglessDescription.TrimEnd() + postContentSuffix;
 
+                        string videoLink = string.Empty;
+
                         result.Add(new SteamNewsItem
                         {
                             Name = webObjectEvent.Name,
@@ -77,6 +89,7 @@ namespace ScrapMechanic.Integration.Repository
                             Date = DateHelper.UnixTimeStampToDateTime(webObjectEvent.PostTime),
                             Image = $"{steamCommunityPublicImages}{coverImage}",
                             ShortDescription = taglessDescription,
+                            VideoLink = videoLink,
                             UpVotes = webObjectEvent.UpVotes,
                             DownVotes = webObjectEvent.DownVotes,
                         });
