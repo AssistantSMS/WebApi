@@ -81,7 +81,7 @@ namespace ScrapMechanic.Integration.Repository
                         taglessDescription = taglessDescription.TrimEnd() + postContentSuffix;
 
                         string videoLink = string.Empty;
-                        if (webObjectEvent.VideoType.Equals("youtube"))
+                        if (!string.IsNullOrEmpty(webObjectEvent.VideoType) && webObjectEvent.VideoType.Equals("youtube"))
                         {
                             videoLink = "https://www.youtube.com/watch?v=" + webObjectEvent.VideoPreviewId;
                         }
