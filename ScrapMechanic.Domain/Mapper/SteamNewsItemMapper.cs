@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ScrapMechanic.Domain.Contract;
-using ScrapMechanic.Domain.Dto;
+using ScrapMechanic.Domain.Dto.ViewModel;
 
 namespace ScrapMechanic.Domain.Mapper
 {
@@ -16,7 +16,8 @@ namespace ScrapMechanic.Domain.Mapper
                 Image = domain.Image,
                 Date = domain.Date,
                 ShortDescription = domain.ShortDescription,
-                SmallImage = domain.SmallImage,
+                UpVotes = domain.UpVotes,
+                DownVotes = domain.DownVotes,
             };
             return vm;
         }

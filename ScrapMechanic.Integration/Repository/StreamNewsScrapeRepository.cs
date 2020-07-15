@@ -2,11 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Encodings.Web;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web;
 using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
+using Newtonsoft.Json;
+using ScrapMechanic.Data.Helper;
 using ScrapMechanic.Domain.Contract;
+using ScrapMechanic.Integration.Contract;
 using ScrapMechanic.Integration.Repository.Interface;
 
 namespace ScrapMechanic.Integration.Repository
@@ -15,95 +20,68 @@ namespace ScrapMechanic.Integration.Repository
     {
         public async Task<List<SteamNewsItem>> GetNewsItems(string appId, int limit = 100, int numberOfInitialPostElementsToScan = 10, int shortDescriptionLength = 250)
         {
-            string url = $"https://store.steampowered.com/news/?appids={appId}";
+            string url = $"https://store.steampowered.com/newshub/app/{appId}";
+            string steamCommunityPublicImages = "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/clans/";
 
-            const string defaultCapsuleImage = "";
-            const string defaultCoverImage = "";
+            const string defaultCoverImage = "11471984/603024a52737dc0483b07166d8ea40652c91e337.png";
             const string defaultLink = "https://scrapassistant.com";
             const string postContentSuffix = "...";
 
             List<SteamNewsItem> result = new List<SteamNewsItem>();
             await GetUrl(url, async doc =>
             {
-                IHtmlCollection<IElement> newsSection = doc.QuerySelectorAll("#news");
-                foreach (IElement newsPostElement in newsSection.Children("div[id^=\"post_\"]"))
+                IElement applicationHostElement = doc.GetElementById("application_config");
+                
+                foreach (IAttr applicationHostAttribute in applicationHostElement.Attributes)
                 {
-                    DateTime headlineDate = DateTime.MinValue;
-                    IHtmlCollection<IElement> headlineDateElements = newsPostElement.QuerySelectorAll(".headline .date");
-                    if (headlineDateElements.Length > 0)
-                    {
-                        string tempDate = headlineDateElements[0].Text();
-                        DateTime.TryParse(tempDate, out headlineDate);
-                    }
+                    if (!applicationHostAttribute.Name.Equals("data-initialEvents", StringComparison.InvariantCultureIgnoreCase)) continue;
 
-                    string title = "Unknown";
-                    IHtmlCollection<IElement> titleElements = newsPostElement.QuerySelectorAll(".headline .posttitle a");
-                    if (titleElements.Length > 0)
-                    {
-                        title = titleElements[0]?.Text() ?? "Unknown";
-                    }
+                    string htmlEncodedString = applicationHostAttribute.Value;
+                    string newsItemsJson = HttpUtility.HtmlDecode(htmlEncodedString) ?? string.Empty;
 
-                    string link = defaultLink;
-                    IHtmlCollection<IElement> linkElements = newsPostElement.QuerySelectorAll(".headline .posttitle a");
-                    if (linkElements.Length > 0)
+                    SteamNewsHub webObject;
+                    try
                     {
-                        if (linkElements[0] is IHtmlAnchorElement)
+                        webObject = JsonConvert.DeserializeObject<SteamNewsHub>(newsItemsJson);
+                    }
+                    catch (Exception)
+                    {
+                        continue;
+                    }
+                    if (webObject == null) continue;
+
+                    foreach (Event webObjectEvent in webObject.Events)
+                    {
+                        string coverImage = defaultCoverImage;
+                        Regex regex = new Regex(@"\[img\]\{STEAM_CLAN_IMAGE}.+\[\/img\]");
+                        if (regex.IsMatch(webObjectEvent.AnnouncementBody.Markdown))
                         {
-                            link = (linkElements[0] as IHtmlAnchorElement)?.Href ?? defaultLink;
+                            coverImage = regex.Match(webObjectEvent.AnnouncementBody.Markdown).Value
+                                .Replace("[img]{STEAM_CLAN_IMAGE}", string.Empty)
+                                .Replace("[/img]", string.Empty);
                         }
-                    }
 
-                    string capsuleImage = defaultCapsuleImage;
-                    IHtmlCollection<IElement> capsuleImageElements = newsPostElement.QuerySelectorAll("img.capsule");
-                    if (capsuleImageElements.Length > 0)
-                    {
-                        if (capsuleImageElements[0] is IHtmlImageElement)
-                        {
-                            capsuleImage = (capsuleImageElements[0] as IHtmlImageElement)?.Source ?? defaultCapsuleImage;
-                            int questionMarkIndex = capsuleImage.IndexOf("?", StringComparison.Ordinal);
-                            if (questionMarkIndex > 0)
-                            {
-                                capsuleImage = capsuleImage.Substring(0, questionMarkIndex);
-                            }
-                        }
-                    }
-
-                    string coverImage = defaultCapsuleImage;
-                    string shortDescriptionContent = string.Empty;
-                    IHtmlCollection<IElement> initialPostElements = newsPostElement.QuerySelectorAll(".body");
-                    if (initialPostElements.Length > 0)
-                    {
-                        int numberToScan = new List<int> {numberOfInitialPostElementsToScan, initialPostElements[0].Children.Length}.Min();
-                        for (int elementIndex = 0; elementIndex < numberToScan; elementIndex++)
-                        {
-                            if (string.IsNullOrEmpty(coverImage) && initialPostElements[0].Children[elementIndex] is IHtmlImageElement)
-                            {
-                                coverImage = (initialPostElements[0].Children[elementIndex] as IHtmlImageElement)?.Source ?? defaultCoverImage;
-                                int questionMarkIndex = coverImage.IndexOf("?", StringComparison.Ordinal);
-                                if (questionMarkIndex > 0)
-                                {
-                                    coverImage = coverImage.Substring(0, questionMarkIndex);
-                                }
-                            }
-                        }
-                        shortDescriptionContent = initialPostElements[0].InnerHtml.CleanHtml();
+                        string descriptionInput = webObjectEvent.AnnouncementBody.Markdown.Replace("[img]{STEAM_CLAN_IMAGE}"+coverImage+"[/img]", string.Empty);
+                        string taglessDescription = Regex.Replace(descriptionInput, @"\[\/*[a-z]+\]", string.Empty)
+                            .Replace("\n", string.Empty);
 
                         int shortDescripMaxLength = shortDescriptionLength - postContentSuffix.Length;
-                        if (shortDescriptionContent.Length > shortDescripMaxLength)
-                            shortDescriptionContent = shortDescriptionContent.Substring(0, shortDescripMaxLength);
-                        shortDescriptionContent = shortDescriptionContent.TrimEnd() + postContentSuffix;
-                    }
+                        if (taglessDescription.Length > shortDescripMaxLength)
+                            taglessDescription = taglessDescription.Substring(0, shortDescripMaxLength);
+                        taglessDescription = taglessDescription.TrimEnd() + postContentSuffix;
 
-                    result.Add(new SteamNewsItem
-                    {
-                        Name = title,
-                        Link = link,
-                        Date = headlineDate,
-                        SmallImage = capsuleImage,
-                        Image = coverImage,
-                        ShortDescription = shortDescriptionContent
-                    });
-                    if (result.Count >= limit) break;
+                        result.Add(new SteamNewsItem
+                        {
+                            Name = webObjectEvent.Name,
+                            Link = $"{url}/view/{webObjectEvent.Id}",
+                            Date = DateHelper.UnixTimeStampToDateTime(webObjectEvent.PostTime),
+                            Image = $"{steamCommunityPublicImages}{coverImage}",
+                            ShortDescription = taglessDescription,
+                            UpVotes = webObjectEvent.UpVotes,
+                            DownVotes = webObjectEvent.DownVotes,
+                        });
+                        if (result.Count >= limit) break;
+                    }
                 }
                 await Task.FromResult(result);
             });

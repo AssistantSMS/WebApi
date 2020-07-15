@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ScrapMechanic.Api.Filter;
 using ScrapMechanic.Domain.Contract;
-using ScrapMechanic.Domain.Dto;
 using ScrapMechanic.Domain.Dto.Enum;
+using ScrapMechanic.Domain.Dto.ViewModel;
 using ScrapMechanic.Domain.Mapper;
 using ScrapMechanic.Integration.Repository.Interface;
 

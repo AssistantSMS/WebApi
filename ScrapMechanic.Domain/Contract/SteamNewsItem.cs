@@ -8,7 +8,8 @@ namespace ScrapMechanic.Domain.Contract
         public DateTime Date { get; set; }
         public string Link { get; set; }
         public string Image { get; set; }
-        public string SmallImage { get; set; }
         public string ShortDescription { get; set; }
+        public int UpVotes { get; set; }
+        public int DownVotes { get; set; }
     }
 }
