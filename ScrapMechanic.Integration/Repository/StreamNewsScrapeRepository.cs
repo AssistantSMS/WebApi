@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Encodings.Web;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using AngleSharp.Dom;
-using AngleSharp.Html.Dom;
 using Newtonsoft.Json;
 using ScrapMechanic.Data.Helper;
 using ScrapMechanic.Domain.Contract;
@@ -24,7 +20,6 @@ namespace ScrapMechanic.Integration.Repository
             string steamCommunityPublicImages = "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/clans/";
 
             const string defaultCoverImage = "11471984/603024a52737dc0483b07166d8ea40652c91e337.png";
-            const string defaultLink = "https://scrapassistant.com";
             const string postContentSuffix = "...";
 
             List<SteamNewsItem> result = new List<SteamNewsItem>();
@@ -73,7 +68,9 @@ namespace ScrapMechanic.Integration.Repository
 
                         string descriptionInput = webObjectEvent.AnnouncementBody.Markdown.Replace("[img]{STEAM_CLAN_IMAGE}"+coverImage+"[/img]", string.Empty);
                         string taglessDescription = Regex.Replace(descriptionInput, @"\[\/*[a-z]+\]", string.Empty)
-                            .Replace("\n", string.Empty);
+                            .Replace("\n\n\n", " ")
+                            .Replace("\n\n", " ")
+                            .Replace("\n", " ");
 
                         int shortDescripMaxLength = shortDescriptionLength - postContentSuffix.Length;
                         if (taglessDescription.Length > shortDescripMaxLength)
@@ -185,7 +182,7 @@ namespace ScrapMechanic.Integration.Repository
 
         public static string AddSpaceAfterSpecialCharacter(this string html, char specialChar)
         {
-            string pattern = @$"\{specialChar}[^\s-]";
+            string pattern = $@"\{specialChar}[^\s-]";
             Regex rg = new Regex(pattern);
             MatchCollection matches = rg.Matches(html);
             foreach (Match match in matches)
