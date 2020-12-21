@@ -16,7 +16,7 @@ namespace ScrapMechanic.Integration.Repository
     {
         public async Task<List<SteamNewsItem>> GetNewsItems(string appId, int limit = 100, int numberOfInitialPostElementsToScan = 10, int shortDescriptionLength = 250)
         {
-            string url = $"https://store.steampowered.com/newshub/app/{appId}";
+            string url = $"https://store.steampowered.com/news/app/{appId}";
             string steamCommunityPublicImages = "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/clans/";
 
             const string defaultCoverImage = "11471984/603024a52737dc0483b07166d8ea40652c91e337.png";
