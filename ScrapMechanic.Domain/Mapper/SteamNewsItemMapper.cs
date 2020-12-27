@@ -19,6 +19,7 @@ namespace ScrapMechanic.Domain.Mapper
                 VideoLink = domain.VideoLink,
                 UpVotes = domain.UpVotes,
                 DownVotes = domain.DownVotes,
+                CommentCount = domain.CommentCount,
             };
             return vm;
         }

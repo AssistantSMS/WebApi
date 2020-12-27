@@ -30,6 +30,8 @@ namespace ScrapMechanic.Integration.Service
                 {
                     mergedItem.UpVotes = foundItem.UpVotes;
                     mergedItem.DownVotes = foundItem.DownVotes;
+                    mergedItem.VideoLink = foundItem.VideoLink;
+                    mergedItem.CommentCount = foundItem.CommentCount;
                 }
                 results.Add(mergedItem);
             }

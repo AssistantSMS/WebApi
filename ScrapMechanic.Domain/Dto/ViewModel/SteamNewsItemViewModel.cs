@@ -12,5 +12,6 @@ namespace ScrapMechanic.Domain.Dto.ViewModel
         public string VideoLink { get; set; }
         public int UpVotes { get; set; }
         public int DownVotes { get; set; }
+        public int CommentCount { get; set; }
     }
 }

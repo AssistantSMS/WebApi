@@ -26,12 +26,12 @@ namespace ScrapMechanic.Integration.Repository
                     int shortDescripMaxLength = shortDescriptionLength - postContentSuffix.Length;
                     string finalDescription = (cleanHtml.Length > shortDescripMaxLength)
                         ? cleanHtml.Substring(0, shortDescripMaxLength)
-                        : cleanHtml.TrimEnd() + postContentSuffix;
+                        : cleanHtml.TrimEnd();
 
                     result.Add(new SteamNewsItem
                     {
                         Name = item.Title,
-                        ShortDescription = finalDescription,
+                        ShortDescription = finalDescription + postContentSuffix,
                         Image = item?.Image?.Url ?? steamCommunityPublicImage,
                         Link = item.Link,
                         Date = item.Date,

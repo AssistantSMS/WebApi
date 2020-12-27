@@ -95,6 +95,7 @@ namespace ScrapMechanic.Integration.Repository
                             VideoLink = videoLink,
                             UpVotes = webObjectEvent.UpVotes,
                             DownVotes = webObjectEvent.DownVotes,
+                            CommentCount = webObjectEvent.AnnouncementBody.CommentCount,
                         });
                         if (result.Count >= limit) break;
                     }
