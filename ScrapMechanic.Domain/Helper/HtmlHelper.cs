@@ -6,7 +6,10 @@ namespace ScrapMechanic.Domain.Helper
     {
         public static string CleanHtml(this string html)
         {
-            string htmlDocument = html.Replace("<br>", "\n").Replace("</li>", "\r\n");
+            string htmlDocument = html
+                .Replace("<br><br>", "\n")
+                .Replace("<br>", "\n")
+                .Replace("</li>", "\r\n");
             string noTags = Regex.Replace(htmlDocument, @"<[^>]*>", string.Empty).Trim();
             return noTags.AddSpaceAfterSpecialCharacter('!')
                 .AddSpaceAfterSpecialCharacter('.')
