@@ -4,6 +4,8 @@ using ScrapMechanic.Data.Cache.Interface;
 using ScrapMechanic.Domain.Configuration.Interface;
 using ScrapMechanic.Integration.Repository;
 using ScrapMechanic.Integration.Repository.Interface;
+using ScrapMechanic.Integration.Service;
+using ScrapMechanic.Integration.Service.Interface;
 
 namespace ScrapMechanic.Data.Helper
 {
@@ -19,8 +21,6 @@ namespace ScrapMechanic.Data.Helper
 
             // Repositories
             //services.AddTransient<IJwtRepository, JwtRepository>();
-
-            services.AddTransient<IStreamNewsScrapeRepository, StreamNewsScrapeRepository>();
             services.AddTransient<IGithubRepository, GithubRepository>();
 
             // MemoryCache stuffs
@@ -28,7 +28,7 @@ namespace ScrapMechanic.Data.Helper
 
 
             // Services
-            //services.AddTransient<IUserService, UserService>();
+            services.AddTransient<ISteamNewsService, SteamNewsService>();
 
             return services;
         }

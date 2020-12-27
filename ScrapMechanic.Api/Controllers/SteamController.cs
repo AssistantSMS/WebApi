@@ -6,7 +6,7 @@ using ScrapMechanic.Domain.Contract;
 using ScrapMechanic.Domain.Dto.Enum;
 using ScrapMechanic.Domain.Dto.ViewModel;
 using ScrapMechanic.Domain.Mapper;
-using ScrapMechanic.Integration.Repository.Interface;
+using ScrapMechanic.Integration.Service.Interface;
 
 namespace ScrapMechanic.Api.Controllers
 {
@@ -15,11 +15,11 @@ namespace ScrapMechanic.Api.Controllers
     [Produces("application/json")]
     public class SteamController : ControllerBase
     {
-        private readonly IStreamNewsScrapeRepository _newsRepo;
+        private readonly ISteamNewsService _steamNewsService;
 
-        public SteamController(IStreamNewsScrapeRepository newsRepo)
+        public SteamController(ISteamNewsService steamNewsService)
         {
-            _newsRepo = newsRepo;
+            _steamNewsService = steamNewsService;
         }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace ScrapMechanic.Api.Controllers
         [CacheFilter(CacheType.SteamNews, numMinutes:30)]
         public async Task<ActionResult<List<SteamNewsItemViewModel>>> News()
         {
-            List<SteamNewsItem> scrapMechanicNewsItems = await _newsRepo.GetNewsItems("387990");
+            List<SteamNewsItem> scrapMechanicNewsItems = await _steamNewsService.GetNewsItems("387990");
             if (scrapMechanicNewsItems.Count == 0) return StatusCode(502);
             return Ok(scrapMechanicNewsItems.ToViewModel());
         }

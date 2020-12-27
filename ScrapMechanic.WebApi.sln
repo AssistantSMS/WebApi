@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30128.74
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScrapMechanic.Api", "ScrapMechanic.Api\ScrapMechanic.Api.csproj", "{4596EDF1-B5A1-498D-8B90-A86BD145E0F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScrapMechanic.Api", "ScrapMechanic.Api\ScrapMechanic.Api.csproj", "{4596EDF1-B5A1-498D-8B90-A86BD145E0F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScrapMechanic.Domain", "ScrapMechanic.Domain\ScrapMechanic.Domain.csproj", "{D4412BA3-FF23-4D6C-A882-32664BA6CE23}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScrapMechanic.Domain", "ScrapMechanic.Domain\ScrapMechanic.Domain.csproj", "{D4412BA3-FF23-4D6C-A882-32664BA6CE23}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScrapMechanic.Data", "ScrapMechanic.Data\ScrapMechanic.Data.csproj", "{61A9B23D-6D41-45CC-8470-DD736ACEA7FB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScrapMechanic.Data", "ScrapMechanic.Data\ScrapMechanic.Data.csproj", "{61A9B23D-6D41-45CC-8470-DD736ACEA7FB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScrapMechanic.Integration", "ScrapMechanic.Integration\ScrapMechanic.Integration.csproj", "{8F366C2F-FB84-4D86-AE30-8332F261F6A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScrapMechanic.Integration", "ScrapMechanic.Integration\ScrapMechanic.Integration.csproj", "{8F366C2F-FB84-4D86-AE30-8332F261F6A3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScrapMechanic.Test", "ScrapMechanic.Test\ScrapMechanic.Test.csproj", "{CA880503-F166-42EA-A329-F5D9C0180CFE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{8F366C2F-FB84-4D86-AE30-8332F261F6A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F366C2F-FB84-4D86-AE30-8332F261F6A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F366C2F-FB84-4D86-AE30-8332F261F6A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA880503-F166-42EA-A329-F5D9C0180CFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA880503-F166-42EA-A329-F5D9C0180CFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA880503-F166-42EA-A329-F5D9C0180CFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA880503-F166-42EA-A329-F5D9C0180CFE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

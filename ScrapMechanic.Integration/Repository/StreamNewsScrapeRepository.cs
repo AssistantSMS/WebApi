@@ -12,7 +12,7 @@ using ScrapMechanic.Integration.Repository.Interface;
 
 namespace ScrapMechanic.Integration.Repository
 {
-    public class StreamNewsScrapeRepository: BaseWebScrapeRepository, IStreamNewsScrapeRepository
+    public class StreamNewsScrapeRepository: BaseWebScrapeRepository, IStreamNewsRepository
     {
         public async Task<List<SteamNewsItem>> GetNewsItems(string appId, int limit = 100, int numberOfInitialPostElementsToScan = 10, int shortDescriptionLength = 250)
         {
@@ -26,6 +26,8 @@ namespace ScrapMechanic.Integration.Repository
             await GetUrl(url, async doc =>
             {
                 IElement applicationHostElement = doc.GetElementById("application_config");
+
+                if (applicationHostElement == null) return;
                 
                 foreach (IAttr applicationHostAttribute in applicationHostElement.Attributes)
                 {
@@ -166,44 +168,5 @@ namespace ScrapMechanic.Integration.Repository
 
         //    return result;
         //}
-    }
-
-    public static class HtmlHelper  // TODO move this to it's own file
-    {
-        public static string CleanHtml(this string html)
-        {
-            string htmlDocument = html.Replace("</li>", "\r\n");
-            string noTags = Regex.Replace(htmlDocument, @"<[^>]*>", string.Empty).Trim();
-            return noTags.AddSpaceAfterSpecialCharacter('!')
-                .AddSpaceAfterSpecialCharacter('.')
-                .AddSpaceAfterSpecialCharacter(',')
-                .AddSpaceBeforeCapitals();
-        }
-
-        public static string AddSpaceAfterSpecialCharacter(this string html, char specialChar)
-        {
-            string pattern = $@"\{specialChar}[^\s-]";
-            Regex rg = new Regex(pattern);
-            MatchCollection matches = rg.Matches(html);
-            foreach (Match match in matches)
-            {
-                string charToKeep = match.Value.Replace(specialChar.ToString(), string.Empty);
-                html = html.Replace(match.Value, charToKeep);
-            }
-            return html;
-        }
-
-        public static string AddSpaceBeforeCapitals(this string html)
-        {
-            string pattern = @"[^\s-][A-Z]";
-            Regex rg = new Regex(pattern);
-            MatchCollection matches = rg.Matches(html);
-            foreach (Match match in matches)
-            {
-                string newValue = match.Value[0] + ". " + match.Value[1];
-                html = html.Replace(match.Value, newValue);
-            }
-            return html;
-        }
     }
 }
